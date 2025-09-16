@@ -20,7 +20,7 @@ jobs:
       JWT_SECRET: ${{ secrets.JWT_SECRET }}
       JWT_EXPIRATION: ${{ secrets.JWT_EXPIRATION }}
     steps:
-      - name: 현재 저장소 코드 Clone
+      - name: 현재 저장소 코드 Clone!
         uses: actions/checkout@v4
 
       - name: .env 파일 생성
