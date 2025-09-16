@@ -1,7 +1,5 @@
 package com.chat.animal.api.auth;
 
-import com.chat.animal.api.annotation.JwtTokenParsing;
-import com.chat.animal.api.annotation.UserPrincipal;
 import com.chat.animal.api.auth.dto.UserRequest;
 import com.chat.animal.application.user.usecase.UserUseCase;
 import com.chat.animal.domain.user.User;
