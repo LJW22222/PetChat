@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Hidden
 public @interface JwtTokenParsing {
-    String header() default "Authorization";
+    String cookieName() default "jwt";
     boolean required() default true;
     boolean stripBearerPrefix() default true;
 }

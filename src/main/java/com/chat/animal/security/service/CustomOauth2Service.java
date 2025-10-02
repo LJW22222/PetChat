@@ -57,7 +57,7 @@ public class CustomOauth2Service extends DefaultOAuth2UserService {
 
         // 3) Security 주체 생성 (권한 최소 ROLE_USER)
         Collection<GrantedAuthority> auth = List.of(new SimpleGrantedAuthority("ROLE_USER"));
-        Map<String,Object> principalAttrs = Map.of("userId", user.getUserId(), "provider", provider.name());
+        Map<String,Object> principalAttrs = Map.of("userId", user.getUserId(), "provider", provider.name(), "providerId", p.id());
         return new DefaultOAuth2User(auth, principalAttrs, "userId");
     }
 

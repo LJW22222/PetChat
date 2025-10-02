@@ -1,6 +1,7 @@
 package com.chat.animal.api.resolver;
 
 import com.chat.animal.api.annotation.JwtTokenParsing;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -33,11 +34,21 @@ public class JwtTokenParsingArgumentResolver implements HandlerMethodArgumentRes
         }
 
         HttpServletRequest req = webRequest.getNativeRequest(HttpServletRequest.class);
-        String raw = (req != null) ? req.getHeader(meta.header()) : null;
+
+        String raw = null;
+        if (req != null && req.getCookies() != null) {
+            for (Cookie c : req.getCookies()) {
+                if (meta.cookieName().equals(c.getName())) {
+                    raw = c.getValue();
+                    break;
+                }
+            }
+        }
+
 
         if (!StringUtils.hasText(raw)) {
             if (meta.required()) {
-                throw new MissingRequestHeaderException(meta.header(), parameter);
+                throw new MissingRequestHeaderException(meta.cookieName(), parameter);
             } else {
                 return null;
             }

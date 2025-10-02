@@ -7,6 +7,7 @@ import com.chat.animal.domain.user.vo.OAuthProvider;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
@@ -15,11 +16,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtProvider jwtProvider;
@@ -31,12 +31,11 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         OAuth2AuthenticationToken auth = (OAuth2AuthenticationToken) authentication;
         OAuth2User principal = auth.getPrincipal();
 
-
-
         String registrationId = auth.getAuthorizedClientRegistrationId(); // "kakao", "google", "naver" 등
         OAuthProvider provider = OAuthProvider.valueOf(registrationId.toUpperCase()); // enum 매핑
 
-        String providerId = principal.getAttribute("provider_id");
+        String providerId = principal.getAttribute("providerId");
+
 
         User user = getUserByProviderAndProviderIdQuery.handle(providerId, provider)
                 .orElseThrow(() -> new IllegalStateException("사용자 없음"));
@@ -55,7 +54,7 @@ public class OAuthSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
         String redirectUrl = (user.getUserId() == null)
                 ? "https://petmatz-fe.vercel.app/kakao-signup"
                 : "https://petmatz-fe.vercel.app/kakao-login";
-
+        log.info(redirectUrl);
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 

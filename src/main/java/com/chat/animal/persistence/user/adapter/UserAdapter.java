@@ -50,4 +50,19 @@ public class UserAdapter implements UserRepository {
         Optional<UserEntity> userEntity = userJpaRepository.findByEmail(email);
         return userEntity.map(UserEntity::toDomain);
     }
+
+    @Override
+    public boolean findByEmailAndPassword(String email, String password) {
+        return userJpaRepository.findByEmailAndPassword(email, password);
+    }
+
+    @Override
+    public Optional<User> findByEmailAndProvider(String email, OAuthProvider oAuthProvider) {
+        Optional<UserEntity> byEmailAndProvider = userJpaRepository.findByEmailAndProvider(email, oAuthProvider);
+        if (byEmailAndProvider.isPresent()) {
+            UserEntity userEntity = byEmailAndProvider.get();
+            return Optional.of(UserEntity.toDomain(userEntity));
+        }
+        return Optional.empty();
+    }
 }

@@ -14,4 +14,8 @@ public interface UserRepository {
     Optional<User> findByProviderIdAndProvider(String providerId, OAuthProvider oAuthProvider);
 
     Optional<User> findByEmail(String email);
+
+    boolean findByEmailAndPassword(String email, String password);
+
+    Optional<User> findByEmailAndProvider(String email, OAuthProvider oAuthProvider);
 }
